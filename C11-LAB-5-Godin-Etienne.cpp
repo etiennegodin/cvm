@@ -198,21 +198,43 @@ tuple <double, double> etape2(int nbImp, int nbImpRV, char formatPapier)
 	return make_tuple(coutR, coutRV);
 
 }
-/*
-double etape3()
+
+double etape3(int nbImp, int nbImpRV, char formatPapier, char typePapier)
 {
 	// Calcul du coût du papier
-	char typePapier;
 	const double PRIX_PAPIER_1 = 20.50;
 	const double PRIX_PAPIER_2 = 67.34;
 	const double PRIX_PAPIER_3 = 122.94;
-
 	double coutPapier;
+	double feuillesMille; 
+	// Calcul feuilles 
 
+	feuillesMille = ((nbImp / 1000.0) + (nbImpRV / 1000.0));
 
+	switch (typePapier)
+	{
 
+		case '1':
+			coutPapier = feuillesMille * PRIX_PAPIER_1;
+			break;
+
+		case '2':
+			coutPapier = feuillesMille * PRIX_PAPIER_2;
+			break;
+
+		case '3':
+			coutPapier = feuillesMille * PRIX_PAPIER_3;
+			break;
+	}
+
+	// Si 8.5*11
+	if (formatPapier == 1)
+	{
+		coutPapier = (coutPapier / 2);
+	}
+	return coutPapier;
 }
-
+/*
 double etape4()
 {
 	// Calcul du coût du façonnage du document
@@ -240,19 +262,22 @@ double etape5()
 int main()
 
 {
+
+	// User inputs
 	int nbOri, nbExe;
 	char formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage;
 
-	//etape1 
-
-
+	// Fonction pour determiner les choix de l'utilisateur
 	getUserInput(nbOri, nbExe, formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage);
 
+	// Variables resultats calculs
 	int nbImpR, nbImpRV;
-	double coutR, coutRV;
+	double coutR, coutRV, coutPapier;
 
 	tie(nbImpR, nbImpRV) = etape1(nbOri, nbExe, formatPapier, typeImpression);
 	tie(coutR, coutRV) = etape2(nbImpR, nbImpRV, formatPapier);
+	coutPapier = etape3(nbImpR, nbImpRV, formatPapier, typePapier);
+
 
 	/*
 	cout << nbOri << "\n"
@@ -266,10 +291,11 @@ int main()
 
 
 	
-	/*
-	cout << nbImpR << "\n"
-		<< nbImpRV << "\n";
-	*/
+
+	cout << coutR << "\n"
+		<< coutRV << "\n"
+		<< coutPapier << "\n";
+	
 
 
 	_getch();
