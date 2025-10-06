@@ -95,18 +95,21 @@ tuple <int,int> etape1(int nbOri, int nbExe, char formatPapier, char typeImpress
 
 		case 'R':
 			if (formatPapier == '1' || formatPapier == '2')
-			{
+			{	
 				nbImpR = nbOri * nbExe;
 				nbImpRV = 0;
+				break;
 			}
 			else if (formatPapier == '3')
 			{
 				nbImpR = nbOri * nbExe / 2;
 				nbImpRV = 0;
+				break;
 			}
 			else
 			{
 				cout << "Mauvais formatR";
+				break;
 			}
 
 		case 'V':
@@ -116,11 +119,15 @@ tuple <int,int> etape1(int nbOri, int nbExe, char formatPapier, char typeImpress
 				{
 					nbImpR = nbExe;
 					nbImpRV = (nbOri - 1) * nbExe / 2;
+					break;
+
 				}
 				else
 				{
 					nbImpR = 0;
 					nbImpRV = nbOri * nbExe / 2;
+					break;
+
 				}
 			}
 			else if (formatPapier == '3')
@@ -130,24 +137,32 @@ tuple <int,int> etape1(int nbOri, int nbExe, char formatPapier, char typeImpress
 				{
 					nbImpR = 0;
 					nbImpRV = nbOri * nbExe / 4;
+					break;
+
 				}
 				else if (reste == 1 || reste == 2)
 				{
 					nbImpR = nbExe;
 					nbImpRV = (nbOri - reste) * nbExe / 4;
+					break;
+
 				}
 				else if (reste == 3)
 				{
 					nbImpR = 0;
 					nbImpRV = (nbOri + 1) * nbExe / 4;
+					break;
+
 				}
 				else cout << "Mauvaise Recto verso";
+				break;
 
-			
 			}
 			else
 			{
 				cout << "Mauvais formatV";
+				break;
+
 			}
 	}	
 
@@ -155,22 +170,35 @@ tuple <int,int> etape1(int nbOri, int nbExe, char formatPapier, char typeImpress
 	return make_tuple(nbImpR, nbImpRV);
 }
 
-/*
-double etape2()
+
+tuple <double, double> etape2(int nbImp, int nbImpRV, char formatPapier)
 {
+
 	// Calcul du coût de l'impression
 	const double PRIX_8x11R = 31;
 	const double PRIX_8x11RV = 60;
 	const double PRIX_11x17R = 61;
 	const double PRIX_11x17RV = 100;
-
 	double coutR, coutRV;
+	if (formatPapier == '1' || formatPapier == '2')
+	{
+		coutR = (nbImp / 1000.0) * PRIX_8x11R;
+		coutRV = (nbImpRV / 1000.0) * PRIX_8x11RV;
 
+	}
+	else if (formatPapier == '3')
+	{
+		cout << 2;
 
+		coutR = (nbImp / 1000.0) * PRIX_11x17R;
+		coutRV = (nbImpRV / 1000.0) * PRIX_11x17RV;
+	}
+	else cout << "Mauvaise entree pour etape 2";
 
+	return make_tuple(coutR, coutRV);
 
 }
-
+/*
 double etape3()
 {
 	// Calcul du coût du papier
@@ -221,8 +249,10 @@ int main()
 	getUserInput(nbOri, nbExe, formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage);
 
 	int nbImpR, nbImpRV;
+	double coutR, coutRV;
 
 	tie(nbImpR, nbImpRV) = etape1(nbOri, nbExe, formatPapier, typeImpression);
+	tie(coutR, coutRV) = etape2(nbImpR, nbImpRV, formatPapier);
 
 	/*
 	cout << nbOri << "\n"
@@ -236,9 +266,10 @@ int main()
 
 
 	
+	/*
 	cout << nbImpR << "\n"
 		<< nbImpRV << "\n";
-	
+	*/
 
 
 	_getch();
