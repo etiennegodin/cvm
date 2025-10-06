@@ -5,12 +5,10 @@
 #include <tuple>
 #include "../cvm 25.h"
 
-
 using namespace std;
 
 const bool MODE_TEST = true;
 const int TEST = 2;
-
 
 void getUserInput(int& nbOri, int& nbExe, char& formatPapier, char& typeImpression, char& typePapier, char& aPerforer, char& typeFaconnage)
 
@@ -279,23 +277,17 @@ double etape4(int nbImpTot, int nbExe, char formatPapier, char aPerforer, char t
 		coutFaconnage += (nbImpTot / 1000.0) * PRIX_PERFORER;
 	}
 
-
 	return coutFaconnage;
 }
 
-/*
-double etape5()
-{
-	// Calcul des taxes et du coût total
 
-
-
-}
-*/
 
 int main()
 
 {
+	// CONSTANTES 
+	const double TPS = 0.05;
+	const double TVQ = 0.09975;
 
 	// User inputs
 	int nbOri, nbExe;
@@ -307,6 +299,7 @@ int main()
 	// Variables resultats calculs
 	int nbImpR, nbImpRV, nbImpTot;
 	double coutR, coutRV, coutPapier, coutFaconnage;
+	double coutProduction, coutTotal;
 
 	// Calcul du nb de feuilles a imprimer
 	tie(nbImpR, nbImpRV) = etape1(nbOri, nbExe, formatPapier, typeImpression);
@@ -322,25 +315,16 @@ int main()
 
 	// Calcul du coût du façonnage du document
 	coutFaconnage = etape4(nbImpTot, nbExe, formatPapier, aPerforer, typeFaconnage);
-
-	/*
-	cout << nbOri << "\n"
-		<< nbExe << "\n"
-		<< formatPapier << "\n"
-		<< typeImpression << "\n"
-		<< typePapier << "\n"
-		<< aPerforer << "\n"
-		<< typeFaconnage << "\n";
-	*/
-
-
 	
+	coutProduction = coutR + coutRV + coutPapier + coutFaconnage;
+	coutTotal = coutProduction * (TVQ + TPS + 1);
 
 	cout << coutR << "\n"
 		<< coutRV << "\n"
-		<< coutPapier << "\n";
-	
-
+		<< coutPapier << "\n"
+		<< coutFaconnage << "\n"
+		<< coutProduction << "\n"
+		<< coutTotal << "\n";
 
 	_getch();
 
