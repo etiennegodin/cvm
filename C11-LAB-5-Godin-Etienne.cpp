@@ -8,7 +8,31 @@
 using namespace std;
 
 const bool MODE_TEST = true;
-const int TEST = 2;
+const int TEST = 3;
+
+
+struct nbImp {
+	int R;
+	int RV;
+
+};
+
+struct coutImpr {
+
+
+	int R;
+	int RV;
+};
+
+struct couts {
+
+	double R;
+	double RV;
+	double Faconnage;
+	double Production;
+	double Total;
+};
+
 
 void getUserInput(int& nbOri, int& nbExe, char& formatPapier, char& typeImpression, char& typePapier, char& aPerforer, char& typeFaconnage)
 
@@ -19,13 +43,13 @@ void getUserInput(int& nbOri, int& nbExe, char& formatPapier, char& typeImpressi
 		{
 
 			case 1:
-				nbOri = 10;
+				nbOri = 1;
 				nbExe = 10;
-				formatPapier = '2';
+				formatPapier = '1';
 				typeImpression = 'R';
-				typePapier = '3';
-				aPerforer = 'N';
-				typeFaconnage = '1';
+				typePapier = '1';
+				aPerforer = 'O';
+				typeFaconnage = '5';
 				break;
 
 			case 2:	
@@ -41,31 +65,31 @@ void getUserInput(int& nbOri, int& nbExe, char& formatPapier, char& typeImpressi
 			case 3:
 				nbOri = 10;
 				nbExe = 10;
-				formatPapier = '2';
+				formatPapier = '3';
 				typeImpression = 'R';
-				typePapier = '3';
-				aPerforer = 'N';
-				typeFaconnage = '1';
+				typePapier = '2';
+				aPerforer = 'O';
+				typeFaconnage = '4';
 				break;
 
 			case 4:
-				nbOri = 10;
-				nbExe = 10;
-				formatPapier = '2';
-				typeImpression = 'R';
-				typePapier = '3';
+				nbOri = 9;
+				nbExe = 15;
+				formatPapier = '1';
+				typeImpression = 'V';
+				typePapier = '1';
 				aPerforer = 'N';
-				typeFaconnage = '1';
+				typeFaconnage = '2';
 				break;
 
 			case 5:
-				nbOri = 10;
-				nbExe = 10;
-				formatPapier = '2';
-				typeImpression = 'R';
+				nbOri = 9;
+				nbExe = 12;
+				formatPapier = '3';
+				typeImpression = 'V';
 				typePapier = '3';
-				aPerforer = 'N';
-				typeFaconnage = '1';
+				aPerforer = 'O';
+				typeFaconnage = '3';
 				break;
 			default:
 				cout << "Mauvais test";
@@ -77,13 +101,13 @@ void getUserInput(int& nbOri, int& nbExe, char& formatPapier, char& typeImpressi
 	{
 
 		/// Manual user input 
-
+		// si nb ori impar demander recto verso 
 	}
 
 
 }
 
-tuple <int,int> etape1(int nbOri, int nbExe, char formatPapier, char typeImpression)
+nbImp etape1(int nbOri, int nbExe, char formatPapier, char typeImpression)
 {
 	// Calcul du nb de feuilles a imprimer
 	int nbImpR, nbImpRV, reste;
@@ -164,6 +188,10 @@ tuple <int,int> etape1(int nbOri, int nbExe, char formatPapier, char typeImpress
 			}
 	}	
 
+	nbImp = nbImp;
+
+	nbImp.R = nbImpR;
+	nbImp.RV = nbImpRV;
 
 	return make_tuple(nbImpR, nbImpRV);
 }
@@ -239,7 +267,7 @@ double etape4(int nbImpTot, int nbExe, char formatPapier, char aPerforer, char t
 	const double PRIX_DOSCHEVAL = 0.1;
 	const double PRIX_PERFORER = 3.0;
 
-	double coutFaconnage; 
+	double coutFaconnage = 0 ; 
 
 
 
@@ -247,24 +275,24 @@ double etape4(int nbImpTot, int nbExe, char formatPapier, char aPerforer, char t
 	{
 
 		case '1':
-			coutFaconnage = (nbExe * PRIX_BROCHE);
+			coutFaconnage += (nbExe * PRIX_BROCHE);
 			break;
 
 		case '2':
 			if (formatPapier == 1 || formatPapier == 2)
 			{
-				coutFaconnage = (nbExe * PRIX_ENCOLLER);
+				coutFaconnage += (nbExe * PRIX_ENCOLLER);
 			}
 			break;
 
 		case '3':
-			coutFaconnage = (nbExe * PRIX_TABLETTE);
+			coutFaconnage += (nbExe * PRIX_TABLETTE);
 			break;
 
 		case '4':
 			if (formatPapier == 3)
 			{
-				coutFaconnage = (nbExe * PRIX_DOSCHEVAL);
+				coutFaconnage += (nbExe * PRIX_DOSCHEVAL);
 			}
 			break;
 
@@ -280,11 +308,10 @@ double etape4(int nbImpTot, int nbExe, char formatPapier, char aPerforer, char t
 	return coutFaconnage;
 }
 
-
-
 int main()
 
 {
+
 	// CONSTANTES 
 	const double TPS = 0.05;
 	const double TVQ = 0.09975;
@@ -297,6 +324,9 @@ int main()
 	getUserInput(nbOri, nbExe, formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage);
 
 	// Variables resultats calculs
+
+
+
 	int nbImpR, nbImpRV, nbImpTot;
 	double coutR, coutRV, coutPapier, coutFaconnage;
 	double coutProduction, coutTotal;
@@ -316,8 +346,11 @@ int main()
 	// Calcul du coût du façonnage du document
 	coutFaconnage = etape4(nbImpTot, nbExe, formatPapier, aPerforer, typeFaconnage);
 	
+	// Calcul cout de production et total
 	coutProduction = coutR + coutRV + coutPapier + coutFaconnage;
 	coutTotal = coutProduction * (TVQ + TPS + 1);
+
+	// Facture 
 
 	cout << coutR << "\n"
 		<< coutRV << "\n"
