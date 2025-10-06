@@ -170,10 +170,8 @@ tuple <int,int> etape1(int nbOri, int nbExe, char formatPapier, char typeImpress
 	return make_tuple(nbImpR, nbImpRV);
 }
 
-
 tuple <double, double> etape2(int nbImp, int nbImpRV, char formatPapier)
 {
-
 	// Calcul du coût de l'impression
 	const double PRIX_8x11R = 31;
 	const double PRIX_8x11RV = 60;
@@ -199,17 +197,15 @@ tuple <double, double> etape2(int nbImp, int nbImpRV, char formatPapier)
 
 }
 
-double etape3(int nbImp, int nbImpRV, char formatPapier, char typePapier)
+double etape3(int nbImpTot, char formatPapier, char typePapier)
 {
 	// Calcul du coût du papier
 	const double PRIX_PAPIER_1 = 20.50;
 	const double PRIX_PAPIER_2 = 67.34;
 	const double PRIX_PAPIER_3 = 122.94;
 	double coutPapier;
-	double feuillesMille; 
-	// Calcul feuilles 
+	double feuillesMille = (nbImpTot / 1000.0);
 
-	feuillesMille = ((nbImp / 1000.0) + (nbImpRV / 1000.0));
 
 	switch (typePapier)
 	{
@@ -234,22 +230,60 @@ double etape3(int nbImp, int nbImpRV, char formatPapier, char typePapier)
 	}
 	return coutPapier;
 }
-/*
-double etape4()
+
+double etape4(int nbImpTot, int nbExe, char formatPapier, char aPerforer, char typeFaconnage)
 {
 	// Calcul du coût du façonnage du document
 
-	char aPerforer, typeFaconnage;
 	const double PRIX_BROCHE = 0.03;
 	const double PRIX_ENCOLLER = 0.6;
 	const double PRIX_TABLETTE = 0.35;
 	const double PRIX_DOSCHEVAL = 0.1;
 	const double PRIX_PERFORER = 3.0;
+
 	double coutFaconnage; 
 
 
+
+	switch (typeFaconnage)
+	{
+
+		case '1':
+			coutFaconnage = (nbExe * PRIX_BROCHE);
+			break;
+
+		case '2':
+			if (formatPapier == 1 || formatPapier == 2)
+			{
+				coutFaconnage = (nbExe * PRIX_ENCOLLER);
+			}
+			break;
+
+		case '3':
+			coutFaconnage = (nbExe * PRIX_TABLETTE);
+			break;
+
+		case '4':
+			if (formatPapier == 3)
+			{
+				coutFaconnage = (nbExe * PRIX_DOSCHEVAL);
+			}
+			break;
+
+		case '5':
+			break;
+	}
+
+	if (aPerforer == 'O')
+	{
+		coutFaconnage += (nbImpTot / 1000.0) * PRIX_PERFORER;
+	}
+
+
+	return coutFaconnage;
 }
 
+/*
 double etape5()
 {
 	// Calcul des taxes et du coût total
@@ -271,13 +305,23 @@ int main()
 	getUserInput(nbOri, nbExe, formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage);
 
 	// Variables resultats calculs
-	int nbImpR, nbImpRV;
-	double coutR, coutRV, coutPapier;
+	int nbImpR, nbImpRV, nbImpTot;
+	double coutR, coutRV, coutPapier, coutFaconnage;
 
+	// Calcul du nb de feuilles a imprimer
 	tie(nbImpR, nbImpRV) = etape1(nbOri, nbExe, formatPapier, typeImpression);
-	tie(coutR, coutRV) = etape2(nbImpR, nbImpRV, formatPapier);
-	coutPapier = etape3(nbImpR, nbImpRV, formatPapier, typePapier);
 
+	// Calcul du coût de l'impression
+	tie(coutR, coutRV) = etape2(nbImpR, nbImpRV, formatPapier);
+	
+	// Calcul intermediaire pour total feuilles 
+	nbImpTot = nbImpR + nbImpRV;
+
+	// Calcul du coût du papier
+	coutPapier = etape3(nbImpTot, formatPapier, typePapier);
+
+	// Calcul du coût du façonnage du document
+	coutFaconnage = etape4(nbImpTot, nbExe, formatPapier, aPerforer, typeFaconnage);
 
 	/*
 	cout << nbOri << "\n"
