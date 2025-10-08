@@ -19,8 +19,8 @@ struct Inputs {
 	char typePapier;
 	char aPerforer;
 	char typeFaconnage;
-	int nbImpR;
-	int nbImpRV;
+	int nbImpR = 0;
+	int nbImpRV = 0;
 };
 
 
@@ -115,16 +115,14 @@ void etape1(Inputs& i)
 					break;
 
 				}
-				else cout << "Mauvaise Recto verso";
-				break;
-
 			}
-			else
+			else 
 			{
-				cout << "Mauvais formatV";
+				cout << "Mauvaise Recto verso";
 				break;
-
 			}
+
+			
 	}	
 
 	i.nbImpR = nbImpR;
@@ -189,7 +187,7 @@ void etape3(const Inputs& i, Couts& c)
 	}
 
 	// Si 8.5*11
-	if (i.formatPapier == 1)
+	if (i.formatPapier == '1')
 	{
 		coutPapier = (coutPapier / 2);
 	}
@@ -197,7 +195,7 @@ void etape3(const Inputs& i, Couts& c)
 	c.coutPapier = coutPapier;
 }
 
-double etape4(const Inputs& i, Couts& c)
+void etape4(const Inputs& i, Couts& c)
 {
 	// Calcul du coût du façonnage du document
 
@@ -207,36 +205,39 @@ double etape4(const Inputs& i, Couts& c)
 	const double PRIX_DOSCHEVAL = 0.1;
 	const double PRIX_PERFORER = 3.0;
 
-	double coutFaconnage = 0 ; 
+	double coutFaconnage ; 
 
 	switch (i.typeFaconnage)
 	{
 
 		case '1':
-			coutFaconnage += (i.nbExe * PRIX_BROCHE);
+			coutFaconnage = (i.nbExe * PRIX_BROCHE);
 			break;
 
 		case '2':
-			if (i.formatPapier == 1 || i.formatPapier == 2)
+			if (i.formatPapier == '1' || i.formatPapier == '2')
 			{
-				coutFaconnage += (i.nbExe * PRIX_ENCOLLER);
+				coutFaconnage = (i.nbExe * PRIX_ENCOLLER);
 			}
 			break;
 
 		case '3':
-			coutFaconnage += (i.nbExe * PRIX_TABLETTE);
+			coutFaconnage = (i.nbExe * PRIX_TABLETTE);
 			break;
 
 		case '4':
-			if (i.formatPapier == 3)
+			if (i.formatPapier == '3')
 			{
-				coutFaconnage += (i.nbExe * PRIX_DOSCHEVAL);
+				coutFaconnage = (i.nbExe * PRIX_DOSCHEVAL);
 			}
 			break;
 
 		case '5':
+			coutFaconnage = 0;
 			break;
 	}
+
+	cout << coutFaconnage;
 
 	if (i.aPerforer == 'O')
 	{
@@ -247,77 +248,59 @@ double etape4(const Inputs& i, Couts& c)
 
 }
 
+void etape5(Couts& c)
+
+{
+	// CONSTANTES 
+	const double TPS = 0.05;
+	const double TVQ = 0.09975;
+
+	// Calcul cout de production et total
+	c.coutProduction = c.coutR + c.coutRV + c.coutPapier + c.coutFaconnage;
+	c.coutTotal = c.coutProduction * (TVQ + TPS + 1);
+}
+
+
 int main()
 
 {
 
 
-
-
-
-
+	// User inputs
+	//Inputs test1{ 1,10,'1','R','1', 'O', '5'};
+	//Inputs test1{ 10,10,'2','R','3','N', '1' };
+	//Inputs test1{ 10,10,'3','R','2','O', '4' };
+	//Inputs test1{ 9,15,'1','V','1','N', '2' };
+	Inputs test1{9,12,'3','V','3','O','3'};
 
 	
-	// CONSTANTES 
-	const double TPS = 0.05;
-	const double TVQ = 0.09975;
-
-	// User inputs
-	Inputs test1{ 1,10,'1','R','1', 'O', '5', 0,0 };
-	/*
-	Inputs test2{ 10,10,'2','R','3','N', '1' };
-	Inputs test3{ 10,10,'3','R','2','O', '4' };
-	Inputs test4{ 9,15,'1','V','1','N', '2' };
-	Inputs test5{ 9,12,'4','V','3','O', '3' };
-
-	*/
 	//Inputs userInputs;
-
-	// 
-
 	Couts couts;
-
 
 	// Fonction pour determiner les choix de l'utilisateur
 	//getUserInput(nbOri, nbExe, formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage);
 
 	// Variables resultats calculs
 
-	int nbImpR, nbImpRV, nbImpTot;
-	double coutR, coutRV, coutPapier, coutFaconnage;
-	double coutProduction, coutTotal;
-	cout << test1.nbImpR << " | " << test1.nbImpRV;
-
-	etape1(test1);
 	// Calcul du nb de feuilles a imprimer
-
+	etape1(test1);
 
 	// Calcul du coût de l'impression
-
-	
-	// Calcul intermediaire pour total feuilles 
-
+	etape2(test1, couts);
 
 	// Calcul du coût du papier
-
+	etape3(test1, couts);
 
 	// Calcul du coût du façonnage du document
-	
+	etape4(test1, couts);
+
 	// Calcul cout de production et total
-	coutProduction = coutR + coutRV + coutPapier + coutFaconnage;
-	coutTotal = coutProduction * (TVQ + TPS + 1);
+	etape5(couts);
 
-	// Facture 
-
-	cout << coutR << "\n"
-		<< coutRV << "\n"
-		<< coutPapier << "\n"
-		<< coutFaconnage << "\n"
-		<< coutProduction << "\n"
-		<< coutTotal << "\n";
-
+	cout << couts.coutProduction;
+	
 	_getch();
-	*/
+	
 
 }
 
