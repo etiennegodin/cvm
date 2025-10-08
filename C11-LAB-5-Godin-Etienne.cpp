@@ -7,10 +7,6 @@
 
 using namespace std;
 
-const bool MODE_TEST = true;
-const int TEST = 3;
-
-
 struct Inputs {
 	int nbOri;
 	int nbExe;
@@ -23,7 +19,6 @@ struct Inputs {
 	int nbImpRV = 0;
 };
 
-
 struct Couts {
 
 	double coutR;
@@ -34,16 +29,74 @@ struct Couts {
 	double coutTotal;
 };
 
-
-
 Inputs getUserInput()
-
 {
-	Inputs temp{};
-	return temp;
+
+
+	Inputs user{};
+
+	int tab = 10;
+	int col = 35;
+	int choix = 40;
+
+	char temp;
+
+	cout <<left << setw(col) << "Nombre d'originaux" << ":";
+	cin >> user.nbOri;
+
+	cout << left << setw(col) << "Nombre d'exemplaires \x85 reproduire" << ":";
+	cin >> user.nbExe;
+
+	//Format papier
+	cout << "Format du papier :" << endl
+		<< setw(tab) << "" << "1. 8\xabx11" << endl
+		<< setw(tab) << "" << "2. 8\xabx14" << endl
+		<< setw(tab) << "" << setw(choix) << "3. 11x17" << "Votre choix : ";
+	user.formatPapier = _getch();
+	cout << user.formatPapier << endl << endl;
+
+	//Type d'impression
+	if (user.nbOri % 2 == 0)
+	{
+		cout << "Type d'impression :" << endl
+			<< setw(tab) << "" << "R. recto" << endl
+			<< setw(tab) << "" << setw(choix) << "V. recto - verso" << "Votre choix : ";
+		user.typeImpression = toupper(_getch());
+		cout << user.typeImpression << endl << endl;
+	}
+	else user.formatPapier = 'R';
+
+	//Format papier
+	cout << "Type de papier :" << endl
+		<< setw(tab) << "" << "1. Repro + gris" << endl
+		<< setw(tab) << "" << "2. Rolland \x82volution glacier" << endl
+		<< setw(tab) << "" << setw(choix) << "3. Wausau royal, fibre texte \x82tain" << "Votre choix : ";
+	user.typePapier = _getch();
+	cout << user.typePapier << endl << endl;
+
+	// Perforer
+	cout << setw(tab+choix) << "Voulez-vous des documents perfor\x82s ? (O/N)" << "Votre choix : ";
+	user.aPerforer = toupper(_getch());
+	cout << user.aPerforer << endl << endl;
+
+	// Faconnage 
+	cout << "Type de fa\x87onnage:" << endl
+		<< setw(tab) << "" << "1. Broche en coin" << endl
+		<< setw(tab) << "" << "2. Encoller avec ruban" << endl
+		<< setw(tab) << "" << "3. Tablettes" << endl
+		<< setw(tab) << "" << "4. Broche \x85 dos de cheval" << endl
+		<< setw(tab) << "" << "5. Encoller avec ruban" << endl
+		<< setw(tab) << "" << setw(choix) << "5. Aucun" << "Votre choix : ";
+	user.typeFaconnage = _getch();
+	cout << user.typeFaconnage << endl << endl;
+
+	cout << "Appuyez sur un touche pour continuer ...";
+	_getch();
+
+
+	return user;
 
 }
-
 
 void etape1(Inputs& i)
 {
@@ -158,8 +211,6 @@ void etape2(const Inputs& i, Couts& c)
 	c.coutRV = coutRV;
 }
 
-
-
 void etape3(const Inputs& i, Couts& c)
 {
 	// Calcul du coût du papier
@@ -260,39 +311,33 @@ void etape5(Couts& c)
 	c.coutTotal = c.coutProduction * (TVQ + TPS + 1);
 }
 
-
 int main()
 
 {
-
-
 	// User inputs
-	//Inputs test1{ 1,10,'1','R','1', 'O', '5'};
-	//Inputs test1{ 10,10,'2','R','3','N', '1' };
-	//Inputs test1{ 10,10,'3','R','2','O', '4' };
-	//Inputs test1{ 9,15,'1','V','1','N', '2' };
-	Inputs test1{9,12,'3','V','3','O','3'};
+	Inputs test1{ 1,10,'1','R','1', 'O', '5'};
+	Inputs test2{ 10,10,'2','R','3','N', '1' };
+	Inputs test3{ 10,10,'3','R','2','O', '4' };
+	Inputs test4{ 9,15,'1','V','1','N', '2' };
+	Inputs test5{9,12,'3','V','3','O','3'};
 
-	
 	//Inputs userInputs;
+	Inputs userInputs{getUserInput() };
+
+	//Initilaiser resultats 
 	Couts couts;
 
-	// Fonction pour determiner les choix de l'utilisateur
-	//getUserInput(nbOri, nbExe, formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage);
-
-	// Variables resultats calculs
-
 	// Calcul du nb de feuilles a imprimer
-	etape1(test1);
+	etape1(userInputs);
 
 	// Calcul du coût de l'impression
-	etape2(test1, couts);
+	etape2(userInputs, couts);
 
 	// Calcul du coût du papier
-	etape3(test1, couts);
+	etape3(userInputs, couts);
 
 	// Calcul du coût du façonnage du document
-	etape4(test1, couts);
+	etape4(userInputs, couts);
 
 	// Calcul cout de production et total
 	etape5(couts);
@@ -301,38 +346,4 @@ int main()
 	
 	_getch();
 	
-
 }
-
-
-
-/*
- void printOutput(string titre, double amount, char deviseCode)
-{
-
-	cout << setw(17) << left << titre << right << ":" << setw(15) << right << fixed << setprecision(2) << amount << " " << deviseCode << endl << "\n";
-}
-
-char getDevise(string title)
-
-{
-	char devise;
-	int tab = 5;
-	int col = 20;
-	int choix = 30;
-
-	cout << title << endl << endl;
-
-	cout << setw(tab) << "" << left << setw(col) << "$ -> Dollar" << setw(tab) << "(Canada)" << endl;
-	cout << setw(tab) << "" << left << setw(col) << "D -> Dollar" << setw(tab) << "(\x90tats-Unis)" << endl;
-	cout << setw(tab) << "" << left << setw(col) << "E -> Euro" << setw(tab) << "(Union Europ\202enne)" << endl;
-	cout << setw(tab) << "" << left << setw(col) << "B -> Baht" << setw(tab) << "(Tha\x8blande)" << endl;
-	cout << setw(tab) << "" << left << setw(col) << "R -> Roupie" << setw(tab) << "(Inde)" << endl;
-	cout << setw(tab) << "" << left << setw(col) << "C -> Couronne" << setw(choix) << "(Danemark)" << "Votre choix : " ;
-	devise = toupper(_getch());
-	cout << devise << endl << "\n";
-	return devise;
-}
-
-
-*/
