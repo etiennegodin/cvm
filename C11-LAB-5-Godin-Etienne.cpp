@@ -11,20 +11,24 @@ const bool MODE_TEST = true;
 const int TEST = 3;
 
 
-struct nbImp {
-	int R;
-	int RV;
-
+struct Inputs {
+	int nbOri;
+	int nbExe;
+	char formatPapier;
+	char typeImpression;
+	char typePapier;
+	char aPerforer;
+	char typeFaconnage;
 };
 
-struct coutImpr {
 
+struct Params {
 
-	int R;
-	int RV;
+	int nbImpR;
+	int nbImpRV;
 };
 
-struct couts {
+struct Couts {
 
 	double R;
 	double RV;
@@ -34,97 +38,35 @@ struct couts {
 };
 
 
-void getUserInput(int& nbOri, int& nbExe, char& formatPapier, char& typeImpression, char& typePapier, char& aPerforer, char& typeFaconnage)
+
+Inputs getUserInput()
 
 {
-	if (MODE_TEST)
-	{
-		switch (TEST)
-		{
-
-			case 1:
-				nbOri = 1;
-				nbExe = 10;
-				formatPapier = '1';
-				typeImpression = 'R';
-				typePapier = '1';
-				aPerforer = 'O';
-				typeFaconnage = '5';
-				break;
-
-			case 2:	
-				nbOri = 10;
-				nbExe = 10;
-				formatPapier = '2';
-				typeImpression = 'R';
-				typePapier = '3';
-				aPerforer = 'N';
-				typeFaconnage = '1';
-				break;
-
-			case 3:
-				nbOri = 10;
-				nbExe = 10;
-				formatPapier = '3';
-				typeImpression = 'R';
-				typePapier = '2';
-				aPerforer = 'O';
-				typeFaconnage = '4';
-				break;
-
-			case 4:
-				nbOri = 9;
-				nbExe = 15;
-				formatPapier = '1';
-				typeImpression = 'V';
-				typePapier = '1';
-				aPerforer = 'N';
-				typeFaconnage = '2';
-				break;
-
-			case 5:
-				nbOri = 9;
-				nbExe = 12;
-				formatPapier = '3';
-				typeImpression = 'V';
-				typePapier = '3';
-				aPerforer = 'O';
-				typeFaconnage = '3';
-				break;
-			default:
-				cout << "Mauvais test";
-				break;
-		}
-
-	}
-	else
-	{
-
-		/// Manual user input 
-		// si nb ori impar demander recto verso 
-	}
-
+	Inputs temp{};
+	return temp;
 
 }
 
-nbImp etape1(int nbOri, int nbExe, char formatPapier, char typeImpression)
+
+void etape1(const Inputs i, Params& p)
 {
 	// Calcul du nb de feuilles a imprimer
+
 	int nbImpR, nbImpRV, reste;
 
-	switch (typeImpression)
+	switch (i.typeImpression)
 	{
 
 		case 'R':
-			if (formatPapier == '1' || formatPapier == '2')
+			if (i.formatPapier == '1' || i.formatPapier == '2')
 			{	
-				nbImpR = nbOri * nbExe;
+				nbImpR = i.nbOri * i.nbExe;
 				nbImpRV = 0;
 				break;
 			}
-			else if (formatPapier == '3')
+			else if (i.formatPapier == '3')
 			{
-				nbImpR = nbOri * nbExe / 2;
+				nbImpR = i.nbOri * i.nbExe / 2;
 				nbImpRV = 0;
 				break;
 			}
@@ -135,44 +77,44 @@ nbImp etape1(int nbOri, int nbExe, char formatPapier, char typeImpression)
 			}
 
 		case 'V':
-			if (formatPapier == '1' || formatPapier == '2')
+			if (i.formatPapier == '1' || i.formatPapier == '2')
 			{
-				if (nbOri % 2 != 0)
+				if (i.nbOri % 2 != 0)
 				{
-					nbImpR = nbExe;
-					nbImpRV = (nbOri - 1) * nbExe / 2;
+					nbImpR = i.nbExe;
+					nbImpRV = (i.nbOri - 1) * i.nbExe / 2;
 					break;
 
 				}
 				else
 				{
 					nbImpR = 0;
-					nbImpRV = nbOri * nbExe / 2;
+					nbImpRV = i.nbOri * i.nbExe / 2;
 					break;
 
 				}
 			}
-			else if (formatPapier == '3')
+			else if (i.formatPapier == '3')
 			{
-				reste = nbOri % 4;
+				reste = i.nbOri % 4;
 				if (reste == 0)
 				{
 					nbImpR = 0;
-					nbImpRV = nbOri * nbExe / 4;
+					nbImpRV = i.nbOri * i.nbExe / 4;
 					break;
 
 				}
 				else if (reste == 1 || reste == 2)
 				{
-					nbImpR = nbExe;
-					nbImpRV = (nbOri - reste) * nbExe / 4;
+					nbImpR = i.nbExe;
+					nbImpRV = (i.nbOri - reste) * i.nbExe / 4;
 					break;
 
 				}
 				else if (reste == 3)
 				{
 					nbImpR = 0;
-					nbImpRV = (nbOri + 1) * nbExe / 4;
+					nbImpRV = (i.nbOri + 1) * i.nbExe / 4;
 					break;
 
 				}
@@ -188,15 +130,13 @@ nbImp etape1(int nbOri, int nbExe, char formatPapier, char typeImpression)
 			}
 	}	
 
-	nbImp = nbImp;
+	p.nbImpR = nbImpR;
+	p.nbImpRV = nbImpRV;
 
-	nbImp.R = nbImpR;
-	nbImp.RV = nbImpRV;
-
-	return make_tuple(nbImpR, nbImpRV);
 }
 
-tuple <double, double> etape2(int nbImp, int nbImpRV, char formatPapier)
+/*
+tuple <double, double> etape2(int nbImp, int nbImpRV, char i.formatPapier)
 {
 	// Calcul du coût de l'impression
 	const double PRIX_8x11R = 31;
@@ -307,11 +247,25 @@ double etape4(int nbImpTot, int nbExe, char formatPapier, char aPerforer, char t
 
 	return coutFaconnage;
 }
-
+*/
 int main()
 
 {
 
+	Inputs test1{ 1,10,'1','R','1', 'O', '5' };
+	Inputs test2{ 10,10,'2','R','3','N', '1' };
+	Inputs test3{ 10,10,'3','R','2','O', '4' };
+	Inputs test4{ 9,15,'1','V','1','N', '2' };
+	Inputs test5{ 9,12,'4','V','3','O', '3' };
+	//Inputs userInputs;
+
+	Couts couts;
+	Params params;
+
+	etape1(test1, params);
+
+	cout << params.nbImpR << " | " << params.nbImpRV;
+	/*
 	// CONSTANTES 
 	const double TPS = 0.05;
 	const double TVQ = 0.09975;
@@ -321,7 +275,7 @@ int main()
 	char formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage;
 
 	// Fonction pour determiner les choix de l'utilisateur
-	getUserInput(nbOri, nbExe, formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage);
+	//getUserInput(nbOri, nbExe, formatPapier, typeImpression, typePapier, aPerforer, typeFaconnage);
 
 	// Variables resultats calculs
 
@@ -360,9 +314,10 @@ int main()
 		<< coutTotal << "\n";
 
 	_getch();
+	*/
 
-	
 }
+
 
 
 /*
