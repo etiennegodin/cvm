@@ -37,13 +37,20 @@ struct Couts {
 	double coutTotal;
 };
 
-char correctUserInput(set<char> correctAnswers)
+char correctUserInput(set<char> correctAnswers, bool upper = false)
 {
 	char tempInput;
 
 	for (bool retry = true; retry; )
 	{
-		tempInput = _getch();
+		if (upper)
+		{
+			tempInput = toupper(_getch());
+		}
+		else {
+
+			tempInput = _getch();
+		}
 
 		if (correctAnswers.find(tempInput) != correctAnswers.end())
 		{
@@ -63,7 +70,7 @@ Inputs getUserInput()
 
 	Inputs user{};
 
-	char temp;
+	set<char> tempSet;
 
 	cout <<left << setw(COL) << "Nombre d'originaux" << ":";
 	cin >> user.nbOri;
@@ -72,15 +79,12 @@ Inputs getUserInput()
 	cin >> user.nbExe;
 
 	//Format papier
-
 	cout << "Format du papier :" << endl
 		<< setw(TAB) << "" << "1. 8\xabx11" << endl
 		<< setw(TAB) << "" << "2. 8\xabx14" << endl
 		<< setw(TAB) << "" << setw(CHOIX) << "3. 11x17" << "Votre CHOIX : ";
-
-
 	
-
+	user.formatPapier = correctUserInput(set<char> {'1', '2', '3'});
 	cout << user.formatPapier << endl << endl;
 
 
@@ -90,7 +94,8 @@ Inputs getUserInput()
 		cout << "Type d'impression :" << endl
 			<< setw(TAB) << "" << "R. recto" << endl
 			<< setw(TAB) << "" << setw(CHOIX) << "V. recto - verso" << "Votre CHOIX : ";
-		user.typeImpression = toupper(_getch());
+
+		user.typeImpression = correctUserInput(set<char> {'R', 'V'}, true);
 		cout << user.typeImpression << endl << endl;
 	}
 	else user.formatPapier = 'R';
@@ -100,12 +105,12 @@ Inputs getUserInput()
 		<< setw(TAB) << "" << "1. Repro + gris" << endl
 		<< setw(TAB) << "" << "2. Rolland \x82volution glacier" << endl
 		<< setw(TAB) << "" << setw(CHOIX) << "3. Wausau royal, fibre texte \x82tain" << "Votre CHOIX : ";
-	user.typePapier = _getch();
+	user.typePapier = correctUserInput(set<char> {'1', '2', '3'});
 	cout << user.typePapier << endl << endl;
 
 	// Perforer
 	cout << setw(TAB+CHOIX) << "Voulez-vous des documents perfor\x82s ? (O/N)" << "Votre CHOIX : ";
-	user.aPerforer = toupper(_getch());
+	user.aPerforer = correctUserInput(set<char> {'O', 'N'}, true);
 	cout << user.aPerforer << endl << endl;
 
 	// Faconnage 
@@ -116,7 +121,7 @@ Inputs getUserInput()
 		<< setw(TAB) << "" << "4. Broche \x85 dos de cheval" << endl
 		<< setw(TAB) << "" << "5. Encoller avec ruban" << endl
 		<< setw(TAB) << "" << setw(CHOIX) << "5. Aucun" << "Votre CHOIX : ";
-	user.typeFaconnage = _getch();
+	user.typeFaconnage = correctUserInput(set<char> {'1', '2', '3', '4', '5'});
 	cout << user.typeFaconnage << endl << endl;
 
 	cout << "Appuyez sur un touche pour continuer ...";
@@ -360,7 +365,6 @@ void afficherFacture(const Couts& couts)
 
 	cout << setw(CHOIX + 3) << left << "Co\x96t total :" << setw(10) << right << fixed << setprecision(2) << couts.coutTotal << " $" << endl;
 
-
 }
 
 
@@ -409,7 +413,7 @@ int main()
 		
 		// Option redo 
 		cout << endl << "Voulez-vous effectuer une nouvelle commande? (O/N) ";
-		redoCommand = toupper(_getch());
+		redoCommand = correctUserInput(set<char> {'O', 'N'}, true);
 		
 		if (redoCommand == 'N')
 		{
