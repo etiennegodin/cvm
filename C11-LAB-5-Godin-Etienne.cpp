@@ -2,8 +2,9 @@
 #include <conio.h>
 #include <string>
 #include <iomanip>
-#include <tuple>
+#include <set>
 #include "../cvm 25.h"
+
 
 using namespace std;
 
@@ -36,6 +37,27 @@ struct Couts {
 	double coutTotal;
 };
 
+char correctUserInput(set<char> correctAnswers)
+{
+	char tempInput;
+
+	for (bool retry = true; retry; )
+	{
+		tempInput = _getch();
+
+		if (correctAnswers.find(tempInput) != correctAnswers.end())
+		{
+			return tempInput;
+			retry = false;
+		}
+
+		else
+		{
+			retry = true;
+		}
+	}
+}
+
 Inputs getUserInput()
 {
 
@@ -50,12 +72,17 @@ Inputs getUserInput()
 	cin >> user.nbExe;
 
 	//Format papier
+
 	cout << "Format du papier :" << endl
 		<< setw(TAB) << "" << "1. 8\xabx11" << endl
 		<< setw(TAB) << "" << "2. 8\xabx14" << endl
 		<< setw(TAB) << "" << setw(CHOIX) << "3. 11x17" << "Votre CHOIX : ";
-	user.formatPapier = _getch();
+
+
+	
+
 	cout << user.formatPapier << endl << endl;
+
 
 	//Type d'impression
 	if (user.nbOri % 2 == 0)
@@ -377,13 +404,18 @@ int main()
 		// Calcul cout de production et total
 		etape5(couts);
 
+		// Affichage
 		afficherFacture(couts);
-
+		
+		// Option redo 
 		cout << endl << "Voulez-vous effectuer une nouvelle commande? (O/N) ";
 		redoCommand = toupper(_getch());
 		
 		if (redoCommand == 'N')
+		{
 			redo = false;
+			return 1;
+		}
 
 	}
 }
