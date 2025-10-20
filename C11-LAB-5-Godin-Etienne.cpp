@@ -7,6 +7,13 @@
 
 using namespace std;
 
+// CONSTANTES D'AFFICHAGES
+const int TAB = 10;
+const int COL= 35;
+const int CHOIX = 40;
+
+using namespace std;
+
 struct Inputs {
 	int nbOri;
 	int nbExe;
@@ -32,26 +39,21 @@ struct Couts {
 Inputs getUserInput()
 {
 
-
 	Inputs user{};
-
-	int tab = 10;
-	int col = 35;
-	int choix = 40;
 
 	char temp;
 
-	cout <<left << setw(col) << "Nombre d'originaux" << ":";
+	cout <<left << setw(COL) << "Nombre d'originaux" << ":";
 	cin >> user.nbOri;
 
-	cout << left << setw(col) << "Nombre d'exemplaires \x85 reproduire" << ":";
+	cout << left << setw(COL) << "Nombre d'exemplaires \x85 reproduire" << ":";
 	cin >> user.nbExe;
 
 	//Format papier
 	cout << "Format du papier :" << endl
-		<< setw(tab) << "" << "1. 8\xabx11" << endl
-		<< setw(tab) << "" << "2. 8\xabx14" << endl
-		<< setw(tab) << "" << setw(choix) << "3. 11x17" << "Votre choix : ";
+		<< setw(TAB) << "" << "1. 8\xabx11" << endl
+		<< setw(TAB) << "" << "2. 8\xabx14" << endl
+		<< setw(TAB) << "" << setw(CHOIX) << "3. 11x17" << "Votre CHOIX : ";
 	user.formatPapier = _getch();
 	cout << user.formatPapier << endl << endl;
 
@@ -59,8 +61,8 @@ Inputs getUserInput()
 	if (user.nbOri % 2 == 0)
 	{
 		cout << "Type d'impression :" << endl
-			<< setw(tab) << "" << "R. recto" << endl
-			<< setw(tab) << "" << setw(choix) << "V. recto - verso" << "Votre choix : ";
+			<< setw(TAB) << "" << "R. recto" << endl
+			<< setw(TAB) << "" << setw(CHOIX) << "V. recto - verso" << "Votre CHOIX : ";
 		user.typeImpression = toupper(_getch());
 		cout << user.typeImpression << endl << endl;
 	}
@@ -68,25 +70,25 @@ Inputs getUserInput()
 
 	//Format papier
 	cout << "Type de papier :" << endl
-		<< setw(tab) << "" << "1. Repro + gris" << endl
-		<< setw(tab) << "" << "2. Rolland \x82volution glacier" << endl
-		<< setw(tab) << "" << setw(choix) << "3. Wausau royal, fibre texte \x82tain" << "Votre choix : ";
+		<< setw(TAB) << "" << "1. Repro + gris" << endl
+		<< setw(TAB) << "" << "2. Rolland \x82volution glacier" << endl
+		<< setw(TAB) << "" << setw(CHOIX) << "3. Wausau royal, fibre texte \x82tain" << "Votre CHOIX : ";
 	user.typePapier = _getch();
 	cout << user.typePapier << endl << endl;
 
 	// Perforer
-	cout << setw(tab+choix) << "Voulez-vous des documents perfor\x82s ? (O/N)" << "Votre choix : ";
+	cout << setw(TAB+CHOIX) << "Voulez-vous des documents perfor\x82s ? (O/N)" << "Votre CHOIX : ";
 	user.aPerforer = toupper(_getch());
 	cout << user.aPerforer << endl << endl;
 
 	// Faconnage 
 	cout << "Type de fa\x87onnage:" << endl
-		<< setw(tab) << "" << "1. Broche en coin" << endl
-		<< setw(tab) << "" << "2. Encoller avec ruban" << endl
-		<< setw(tab) << "" << "3. Tablettes" << endl
-		<< setw(tab) << "" << "4. Broche \x85 dos de cheval" << endl
-		<< setw(tab) << "" << "5. Encoller avec ruban" << endl
-		<< setw(tab) << "" << setw(choix) << "5. Aucun" << "Votre choix : ";
+		<< setw(TAB) << "" << "1. Broche en coin" << endl
+		<< setw(TAB) << "" << "2. Encoller avec ruban" << endl
+		<< setw(TAB) << "" << "3. Tablettes" << endl
+		<< setw(TAB) << "" << "4. Broche \x85 dos de cheval" << endl
+		<< setw(TAB) << "" << "5. Encoller avec ruban" << endl
+		<< setw(TAB) << "" << setw(CHOIX) << "5. Aucun" << "Votre CHOIX : ";
 	user.typeFaconnage = _getch();
 	cout << user.typeFaconnage << endl << endl;
 
@@ -311,9 +313,35 @@ void etape5(Couts& c)
 	c.coutTotal = c.coutProduction * (TVQ + TPS + 1);
 }
 
+void afficherFacture(const Couts& couts)
+
+{
+	clrscr();
+
+	cout << endl << endl << "FACTURE" << endl << endl;
+
+	cout << setw(3) << "" << setw(CHOIX) << left << "Co\x96t des impressions recto :" << setw(10) << right << fixed << setprecision(2) << couts.coutR << " $" << endl;
+	cout << setw(3) << "" << setw(CHOIX) << left << "Co\x96t des impressions recto-verso :" << setw(10) << right << fixed << setprecision(2) << couts.coutRV << " $" << endl
+		<< endl;
+
+	cout << setw(3) << "" << setw(CHOIX) << left << "Co\x96t du papier :" << setw(10) << right << fixed << setprecision(2) << couts.coutPapier << " $" << endl;
+	cout << setw(3) << "" << setw(CHOIX) << left << "Co\x96t du fa\x87onnage :" << setw(10) << right << fixed << setprecision(2) << couts.coutFaconnage << " $" << endl;
+	cout << setw(3) << "" << setw(CHOIX) << "" << right << "------------" << endl << endl;
+
+	cout << setw(3) << "" << setw(CHOIX) << left << "Co\x96t de production :" << setw(10) << right << fixed << setprecision(2) << couts.coutProduction << " $" << endl;
+	cout << setw(3) << "" << setw(CHOIX) << "" << right << "============" << endl << endl;
+
+	cout << setw(CHOIX + 3) << left << "Co\x96t total :" << setw(10) << right << fixed << setprecision(2) << couts.coutTotal << " $" << endl;
+
+
+}
+
+
 int main()
 
 {
+
+
 	// User inputs
 	Inputs test1{ 1,10,'1','R','1', 'O', '5'};
 	Inputs test2{ 10,10,'2','R','3','N', '1' };
@@ -342,8 +370,11 @@ int main()
 	// Calcul cout de production et total
 	etape5(couts);
 
-	cout << couts.coutProduction;
-	
+	afficherFacture(couts);
+
+	cout << "Voulez-vous effectuer une nouvelle commande?";
+	user.aPerforer = toupper(_getch());
+
 	_getch();
 	
 }
