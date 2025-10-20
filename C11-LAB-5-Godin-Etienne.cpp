@@ -341,40 +341,49 @@ int main()
 
 {
 
+	bool redo = true;
+	while (redo)
 
-	// User inputs
-	Inputs test1{ 1,10,'1','R','1', 'O', '5'};
-	Inputs test2{ 10,10,'2','R','3','N', '1' };
-	Inputs test3{ 10,10,'3','R','2','O', '4' };
-	Inputs test4{ 9,15,'1','V','1','N', '2' };
-	Inputs test5{9,12,'3','V','3','O','3'};
+	{
+		clrscr();
 
-	//Inputs userInputs;
-	Inputs userInputs{getUserInput() };
+		char redoCommand;
 
-	//Initilaiser resultats 
-	Couts couts;
+		// User inputs
+		Inputs test1{ 1,10,'1','R','1', 'O', '5' };
+		Inputs test2{ 10,10,'2','R','3','N', '1' };
+		Inputs test3{ 10,10,'3','R','2','O', '4' };
+		Inputs test4{ 9,15,'1','V','1','N', '2' };
+		Inputs test5{ 9,12,'3','V','3','O','3' };
 
-	// Calcul du nb de feuilles a imprimer
-	etape1(userInputs);
+		//Inputs userInputs;
+		Inputs userInputs{ getUserInput() };
 
-	// Calcul du coût de l'impression
-	etape2(userInputs, couts);
+		//Initilaiser resultats 
+		Couts couts;
 
-	// Calcul du coût du papier
-	etape3(userInputs, couts);
+		// Calcul du nb de feuilles a imprimer
+		etape1(userInputs);
 
-	// Calcul du coût du façonnage du document
-	etape4(userInputs, couts);
+		// Calcul du coût de l'impression
+		etape2(userInputs, couts);
 
-	// Calcul cout de production et total
-	etape5(couts);
+		// Calcul du coût du papier
+		etape3(userInputs, couts);
 
-	afficherFacture(couts);
+		// Calcul du coût du façonnage du document
+		etape4(userInputs, couts);
 
-	cout << "Voulez-vous effectuer une nouvelle commande?";
-	user.aPerforer = toupper(_getch());
+		// Calcul cout de production et total
+		etape5(couts);
 
-	_getch();
-	
+		afficherFacture(couts);
+
+		cout << endl << "Voulez-vous effectuer une nouvelle commande? (O/N) ";
+		redoCommand = toupper(_getch());
+		
+		if (redoCommand == 'N')
+			redo = false;
+
+	}
 }
