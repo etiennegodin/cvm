@@ -53,10 +53,15 @@ vector <int> rollDice(vector<int> results,int n)
 	return results;
 }
 
-void updateUi()
+void updateUi(vector<int> results)
 
 {
-
+	cout << results.size() << endl;
+	/*
+	for (int i = 0; i < results.size(); i++) {
+		cout << results[i] << "\n";
+	}
+	*/
 
 
 }
@@ -66,10 +71,12 @@ int main()
 {
 
 	int nbExperience = 7;
-	//vector <int> results;
 	int nbLancers = 0;
+	int nbLancerCumulatif = 0;
+
 	for (int i = 0; i < nbExperience; i++)
 	{
+		vector <int> results;
 
 		if (nbLancers < 1)
 		{
@@ -77,19 +84,20 @@ int main()
 		}
 		else
 		{
-
-			nbLancers += (pow(10, i));
-
+			nbLancers = (pow(10, i));
 		}
+
+		nbLancerCumulatif = nbLancerCumulatif + nbLancers;
+		cout << nbLancers << endl;
 		// nb decimale = nbExperience 
-		cout << "nb lancer" << nbLancers <<endl;
+		results = rollDice(results, nbLancers);
 
-		//results = rollDice(results, nbLancers);
+		updateUi(results);
 
-		// update ui
+		cout << "cumu" << nbLancerCumulatif;
 
 
-		//_getch();
+		_getch();
 
 
 
