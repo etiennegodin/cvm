@@ -4,12 +4,15 @@
 #include <iomanip>
 #include <vector>
 #include <cmath>
+#include <../cvm 25.h>
+
 using namespace std;
 
 // CONSTANTES D'AFFICHAGES
-const int TAB = 10;
-const int COL= 35;
-const int CHOIX = 40;
+const int col1 = 10;
+const int col2= 15;
+const int col3 = 15;
+const int colspace = 3;
 
 using namespace std;
 
@@ -53,16 +56,69 @@ vector <int> rollDice(vector<int> results,int n)
 	return results;
 }
 
-void updateUi(vector<int> results)
+void updateUi(vector<int> results, int nbLancerCumulatif, int nbExperience)
 
 {
-	cout << results.size() << endl;
-	/*
-	for (int i = 0; i < results.size(); i++) {
-		cout << results[i] << "\n";
-	}
-	*/
+	vector <int> freq = { 0,0,0,0,0,0 };
 
+	double size = results.size();
+
+	int valeurFace;
+	for (int i = 0; i < size; i++) 
+	{
+		valeurFace = results.at(i);
+		switch(valeurFace)
+		{
+
+			case 1:
+				freq.at(0) += 1;
+				break;
+			case 2:
+				freq.at(1) += 1;
+				break;
+			case 3:
+				freq.at(2) += 1;
+				break;
+			case 4:
+				freq.at(3) += 1;
+				break;
+			case 5:
+				freq.at(4) += 1;
+				break;
+			case 6:
+				freq.at(5) += 1;
+				break;
+
+		}
+
+	}
+
+	//Titre
+	cout << "Experience aleatoire avec " << setprecision(0) << size << " lancer" << (size == 1 ? "" : "s")
+		<< endl << endl;
+	//Titre tableau
+	cout << setw(col1) << right << "Face" << setw(col2) << "Frequence" << setw(col3) << "Distribution"
+		<< endl
+		<< endl;
+	// Donnes
+	for (int i = 0; i < freq.size(); i++)
+	{
+
+		cout << setw(col1-1) << right << "Face " << (i+1) << setw(col2) << freq.at(i) << setw(col3 - 2.0) << setprecision(2) << fixed << ((freq.at(i) / size) * 100) << " %" << endl;
+
+	}
+
+	cout << setw(col1) << "" << setw(col2) << "--------" << setw(col3) << "--------"
+		<< endl << endl;
+
+	cout << setfill(' ') << setw(col1) << right << "" << setw(col2) << size << setw(col3 - 2.0) << setprecision(2) << fixed << 100.00 << " %" << endl;
+
+	// Cumul
+
+	cout << "Statistiques cumulatives apres " << nbExperience << " experience" << (nbExperience == 1 ? "" : "s")
+		<< endl << endl;
+	cout << " ===> " << nbLancerCumulatif << " lancer" << (nbLancerCumulatif == 1 ? "" : "s")
+		<< endl << endl;
 
 }
 
@@ -88,14 +144,9 @@ int main()
 		}
 
 		nbLancerCumulatif = nbLancerCumulatif + nbLancers;
-		cout << nbLancers << endl;
-		// nb decimale = nbExperience 
 		results = rollDice(results, nbLancers);
 
-		updateUi(results);
-
-		cout << "cumu" << nbLancerCumulatif;
-
+		updateUi(results, nbLancerCumulatif, i+1);
 
 		_getch();
 
